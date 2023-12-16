@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Defs>
+	<ThingDef ParentName="BuildingShipBase">
+		<defName>Ship_Engine_Spinal</defName>
+		<label>Spinal Engine</label>
+		<designatorDropdown>Ship_Engines</designatorDropdown>
+		<thingClass>Building</thingClass>
+		<drawerType>MapMeshAndRealTime</drawerType>
+		<graphicData>
+			<texPath>Things/Building/Ship/NuclearEngine</texPath>
+			<graphicClass>Graphic_Multi</graphicClass>
+			<shaderType>CutoutComplex</shaderType> 
+			<drawSize>(5,7)</drawSize>
+		</graphicData>
+		<statBases>
+			<WorkToBuild>80000</WorkToBuild>
+			<MaxHitPoints>2500</MaxHitPoints>
+			<Flammability>0</Flammability>
+		</statBases>
+		<tickerType>Normal</tickerType>
+		<description>A nuclear-powered spinal engine capable of launching a ship into orbit. Will cause pollution. Not suitable for interplanetary travel.\n\nThrust: 3,000+25% per amp\nFuel use: 3 fuel pods+25% per amp, per second\nMax takeoffStrength: 4000+25% per amp</description>
+		<researchPrerequisites>
+			<li>ShipEngine</li>
+			<li>ShipReactor</li>
+			<li>ShipTurretLarge</li>
+		</researchPrerequisites>
+		<size>(5,5)</size>
+		<receivesSignals>true</receivesSignals>
+		<designationCategory>Ship</designationCategory>
+		<comps>
+			<li Class="CompProperties_SoShipPart">
+				<hermetic>true</hermetic>
+			</li>
+			<li Class="CompProperties_SpinalMount">
+				<emits>false</emits>
+				<receives>true</receives>
+			</li>
+			<li Class="CompProperties_Refuelable">
+				<fuelCapacity>4000.0</fuelCapacity>
+				<targetFuelLevelConfigurable>true</targetFuelLevelConfigurable>
+				<fuelFilter>
+					<thingDefs>
+						<li>ShuttleFuelPods</li>
+					</thingDefs>
+				</fuelFilter>
+				<consumeFuelOnlyWhenUsed>true</consumeFuelOnlyWhenUsed>
+				<autoRefuelPercent>10</autoRefuelPercent>
+				<showFuelGizmo>false</showFuelGizmo>
+				<drawOutOfFuelOverlay>false</drawOutOfFuelOverlay>
+				<drawFuelGaugeInMap>false</drawFuelGaugeInMap>
+				<showAllowAutoRefuelToggle>true</showAllowAutoRefuelToggle>
+			</li>
+			<li Class="CompProperties_EngineTrailExtended">
+				<!--graphicData>
+					<texPath>Things/Building/Ship/NuclearEngineTrail</texPath>
+					<graphicClass>Graphic_Multi</graphicClass>
+					<drawSize>(7,36.5)</drawSize>
+				</graphicData-->
+				<thrust>6</thrust>
+				<fuelUse>3</fuelUse>
+				<takeOff>true</takeOff>
+			</li>
+			<li>
+				<compClass>CompColorable</compClass>
+			</li>
+		</comps>
+		<placeWorkers>
+			<li>PlaceWorker_ShipEngine</li>
+		</placeWorkers>
+		<building>
+			<shipPart>true</shipPart>
+		</building>
+		<costList>
+			<Steel>600</Steel>
+			<Plasteel>120</Plasteel>
+			<ComponentIndustrial>12</ComponentIndustrial>
+			<ComponentSpacer>8</ComponentSpacer>
+		</costList>
+	</ThingDef>
+</Defs>

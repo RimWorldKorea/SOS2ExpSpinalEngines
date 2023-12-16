@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ModMetaData>
+  <name>Spinal Engines for SOS2Exp</name>
+  <author>TheCafFiend</author>
+  <packageId>TheCafFiend.SOS2ExpSpinalEngines</packageId> 
+  <supportedVersions>
+    <li>1.4</li>
+  </supportedVersions>
+  <description>This addon mod adds basic spinal engine functionality to SOS2. Only made for use for the exp version for 1.4</description>
+  <modDependencies>
+		<li>
+			<packageId>kentington.saveourship2</packageId>
+			<displayName>Save Our Ship 2</displayName>
+			<downloadUrl>https://github.com/SonicTHI/SaveOurShip2Experimental</downloadUrl>
+		</li>
+	</modDependencies>
+	<loadAfter>
+		<li>brrainz.harmony</li>
+		<li>Ludeon.RimWorld</li>
+		<li>Ludeon.RimWorld.Royalty</li>
+		<li>Ludeon.RimWorld.Ideology</li>
+		<li>Ludeon.RimWorld.Biotech</li>
+		<li>kentington.saveourship2</li>
+	</loadAfter>
+</ModMetaData>
