@@ -36,6 +36,10 @@
 				<emits>false</emits>
 				<receives>true</receives>
 			</li>
+			<li Class="CompProperties_Power">
+				<compClass>CompPowerTrader</compClass>
+				<transmitsPower>true</transmitsPower>
+			</li>
 			<li Class="CompProperties_Refuelable">
 				<fuelCapacity>4000.0</fuelCapacity>
 				<targetFuelLevelConfigurable>true</targetFuelLevelConfigurable>
@@ -51,7 +55,7 @@
 				<drawFuelGaugeInMap>false</drawFuelGaugeInMap>
 				<showAllowAutoRefuelToggle>true</showAllowAutoRefuelToggle>
 			</li>
-			<li Class="CompProperties_EngineTrailExtended">
+			<li Class="CompProperties_EngineTrail">
 				<!--graphicData>
 					<texPath>Things/Building/Ship/NuclearEngineTrail</texPath>
 					<graphicClass>Graphic_Multi</graphicClass>
