@@ -40,6 +40,7 @@
 				<compClass>CompPowerTrader</compClass>
 				<transmitsPower>true</transmitsPower>
 			</li>
+			<li Class="CompProperties_Flickable"/>
 			<li Class="CompProperties_Refuelable">
 				<fuelCapacity>4000.0</fuelCapacity>
 				<targetFuelLevelConfigurable>true</targetFuelLevelConfigurable>
@@ -79,7 +80,7 @@
 			<Steel>600</Steel>
 			<Plasteel>120</Plasteel>
 			<ComponentIndustrial>12</ComponentIndustrial>
-			<ComponentSpacer>8</ComponentSpacer>
+			<ComponentSpacer>12</ComponentSpacer>
 		</costList>
 	</ThingDef>
 </Defs>
