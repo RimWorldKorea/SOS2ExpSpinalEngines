@@ -67,8 +67,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Source\CompEngineTrailExtended.cs" />
-    <Compile Include="Source\CompProperties_EngineTrailExtended.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="1.4\Defs\ThingDefs_Buildings\Buildings_Ship.xml" />
