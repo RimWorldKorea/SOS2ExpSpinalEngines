@@ -6,7 +6,6 @@ using Verse;
 /*TODO
  * Fuel postfix called... While paused and visible? The hell?
  * Fuel use returns 0's after some decon nonsense, somehow
- * Setcolor the amplifiers to, I don't know, purple?
  */
 
 namespace TheCafFiend
@@ -24,9 +23,14 @@ namespace TheCafFiend
         public static float SpinalRecalc(CompEngineTrail instance) //stolen from Building_ShipTurret but modified 
         {
             int amplifierCount = 0;
+            float ampBoost = 0;
+            bool foundNonAmp = false;
+            Thing amp = instance.parent;
+            IntVec3 previousThingPos;
+            IntVec3 vecMoveCheck;
             if ("Ship_Engine_Spinal" == instance.parent.def.defName) // This feels filthy I bet there is a better way TODO
             {
-                CompSpinalMount spinalComp = instance.parent.TryGetComp<CompSpinalMount>(); // currently not terribly used, possibly in the future for that .SetColor?
+                CompSpinalMount spinalComp = instance.parent.TryGetComp<CompSpinalMount>();
                 if (null == spinalComp)
                 {
                     Log.Message("spinalcomp in SpinalRecalc null");
@@ -37,11 +41,6 @@ namespace TheCafFiend
                     Log.Message("parent map in SpinalRecalc was null!");
                     return 0;
                 }
-                float ampBoost = 0;
-                bool foundNonAmp = false;
-                Thing amp = instance.parent;
-                IntVec3 previousThingPos;
-                IntVec3 vecMoveCheck;
                 vecMoveCheck = -1 * amp.Rotation.FacingCell; // OG SOS2 basically rebuilt FacingCell, someone pointed that out to me
                 // Log.Message(string.Format("found rotation in SpincalRecalc, iterating, vec is: {0}", vec));
                 previousThingPos = amp.Position - (2 * vecMoveCheck); //Engines are inverse side from turrets, and engines are lorge
@@ -126,7 +125,6 @@ namespace TheCafFiend
                     Log.Message("amp in find EngineFromSpinal was null!");
                     return null;
                 }
-                // CompSpinalMount ampComp = amp.TryGetComp<CompSpinalMount>(); // used only for setColor I'm not currently implementing at all
 
                 // Log.Message($"amp.position is {amp.Position} and previousthingpos - vec - vec is {previousThingPos - vec - vec} ampdefname is {amp.def.defName}");
                 if (amp.Rotation != SpinalObject.Rotation && "Ship_Engine_Spinal" != amp.def.defName) // Engines are backwards! 
@@ -138,7 +136,7 @@ namespace TheCafFiend
                 {
                     // Log.Message(string.Format("amp found, ampcount is {0}", AmplifierCount));
                     // ampComp.SetColor(spinalComp.Props.color);
-                    // Left in case I need this block later, but seems unlikely: Don't care how many are found here
+                    // Left in case I need this block later, but seems unlikely: Don't care how many are found here, don't setcolour till checking from an engine
                 }
                 //found engine (Note the double -vecMoveCheck!)
                 else if (previousThingPos - vecMoveCheck - vecMoveCheck == amp.Position && "Ship_Engine_Spinal" == amp.def.defName) // Is there a better check?
@@ -165,7 +163,7 @@ namespace TheCafFiend
         public static void DoPatching()
         {
             // Log.Message("SOS2EXPSpinalEngines DoPatching called");
-            var harmony = new Harmony("TheCafFiend.SOS2ExpSpinal"); //Not 100% sure but think this is just namespace stuff?
+            var harmony = new Harmony("TheCafFiend.SOS2ExpSpinal"); 
             harmony.PatchAll();
         }
     }
@@ -203,11 +201,11 @@ namespace TheCafFiend
                 if (0 != tempAmpBonus)
                 {
                     Log.Message($"Spinal Engine fuel (OG {__result.fuelUse}) postfixed value (Bonus {tempAmpBonus}) is: {__result.fuelUse * (1 + tempAmpBonus)}");
-                    __result.fuelUse = (int)(__result.fuelUse * (1 + tempAmpBonus));
+                    // __result.fuelUse = (int)(__result.fuelUse * (1 + tempAmpBonus));
                 }
                 else // Incomplete spinal engine, no fuel use
                 {
-                    __result.fuelUse = 0;
+                     // __result.fuelUse = 0;
                 }
             } // postfix so no "else", already correct value
         }
