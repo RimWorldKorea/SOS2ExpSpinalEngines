@@ -28,15 +28,15 @@ namespace TheCafFiend
             Thing amp = instance.parent;
             IntVec3 previousThingPos;
             IntVec3 vecMoveCheck;
-            if ("Ship_Engine_Spinal" == instance.parent.def.defName) // This feels filthy I bet there is a better way TODO
+            if (instance.parent.def.defName == "Ship_Engine_Spinal") // This feels filthy I bet there is a better way TODO
             {
                 CompSpinalMount spinalComp = instance.parent.TryGetComp<CompSpinalMount>();
-                if (null == spinalComp)
+                if (spinalComp == null)
                 {
                     Log.Message("spinalcomp in SpinalRecalc null");
                     return 0;
                 }
-                if (null == instance.parent.Map)
+                if (instance.parent.Map == null)
                 {
                     Log.Message("parent map in SpinalRecalc was null!");
                     return 0;
@@ -48,7 +48,7 @@ namespace TheCafFiend
                 {
                     previousThingPos -= vecMoveCheck;
                     amp = previousThingPos.GetFirstThingWithComp<CompSpinalMount>(instance.parent.Map);
-                    if (null == amp)
+                    if (amp == null)
                     {
                         Log.Message("new amp at previousthingspos in SpinalRecalc was null!");
                         return 0; 
@@ -103,14 +103,14 @@ namespace TheCafFiend
             bool foundNonAmp = false;
             Thing amp = SpinalObject;
             vecMoveCheck = -1 * amp.Rotation.FacingCell; 
-            if (null == amp.Map)
+            if (amp.Map == null)
             {
                 Log.Message("parent map on trying to find EngineFromSpinal was null!"); // Something went rather sideways, is this log.error? 
                 return null;
             }
             // Log.Message($"found rotation on a spinal component, iterating, vecMoveCheck is: {vecMoveCheck}");
             previousThingPos = amp.Position;
-            if ("ShipSpinalEmitter" == SpinalObject.def.defName)
+            if (SpinalObject.def.defName == "ShipSpinalEmitter")
             {
                 previousThingPos -= vecMoveCheck; // Jump one more if it's a capacitor, to reach the amp
             }
@@ -120,7 +120,7 @@ namespace TheCafFiend
                 // Log.Message($"Climbing spinal to find engine, looking at: {previousThingPos}");
                 // Log.Message($"previousThingPos is {previousThingPos} and amp.Position is {amp.Position} and amp.Map.Biome is {amp.Map.Biome}");
                 amp = previousThingPos.GetFirstThingWithComp<CompSpinalMount>(amp.Map);
-                if (null == amp)
+                if (amp == null)
                 {
                     Log.Message("amp in find EngineFromSpinal was null!");
                     return null;
@@ -172,11 +172,11 @@ namespace TheCafFiend
     {
         public static void Postfix(ref int __result, CompEngineTrail __instance)
         {
-            Log.Message("SOS2ExpSpinalEngine PostFix from PatchEngineThrust called");
-            if ("Ship_Engine_Spinal" == __instance.parent.def.defName) // This feels filthy I bet there is a better way TODO
+            // Log.Message("SOS2ExpSpinalEngine PostFix from PatchEngineThrust called");
+            if (__instance.parent.def.defName == "Ship_Engine_Spinal") // This feels filthy I bet there is a better way TODO
             {
                 float TempAmpBonus = SOS2ExpSpinalEngines.SpinalRecalc(__instance);
-                if (0 != TempAmpBonus)
+                if (TempAmpBonus != 0)
                 {
                     Log.Message($"Thrust of spinal returned was: {__result * (1 + TempAmpBonus)}");
                     __result = (int)(__result * (1 + TempAmpBonus));
@@ -195,10 +195,10 @@ namespace TheCafFiend
         public static void Postfix(ref CompProperties_EngineTrail __result, CompEngineTrail __instance)
         {
             // Log.Message("SOS2ExpSE Postfix enginetrail props called");
-            if ("Ship_Engine_Spinal" == __instance.parent.def.defName) // This feels filthy I bet there is a better way TODO
+            if (__instance.parent.def.defName == "Ship_Engine_Spinal") // This feels filthy I bet there is a better way TODO
             {
                 float tempAmpBonus = SOS2ExpSpinalEngines.SpinalRecalc(__instance);
-                if (0 != tempAmpBonus)
+                if (tempAmpBonus != 0)
                 {
                     Log.Message($"Spinal Engine fuel (OG {__result.fuelUse}) postfixed value (Bonus {tempAmpBonus}) is: {__result.fuelUse * (1 + tempAmpBonus)}");
                     // __result.fuelUse = (int)(__result.fuelUse * (1 + tempAmpBonus));
@@ -235,20 +235,20 @@ namespace TheCafFiend
             { 
                 // Log.Message("part on ship");
                 int shipIndex = mapComp.ShipIndexOnVec(vec);
-                if (-1 == shipIndex)
+                if (shipIndex == -1)
                 {
                     return; // Might not be an error, may just be partly on ship, or not on at all, check other parts
                 }
                 SoShipCache shipToOperateOn = mapComp.ShipsOnMapNew[shipIndex];
                 shipToOperateOn.AddToCache(argBuilding); // I think? this fails but is a hashset anyhow? 
-                if (null == argBuilding.TryGetComp<CompSpinalMount>())
+                if (argBuilding.TryGetComp<CompSpinalMount>() == null)
                 {
                     Log.Message("SOS2ExpSpinalEngines SpinalComp null");
                     return;
                 }
                 // Log.Message("Found a spinal component in postpostfix");
                 Building foundEngine = TheCafFiend.SOS2ExpSpinalEngines.EngineFromSpinal(argBuilding);
-                if (null == foundEngine)
+                if (foundEngine == null)
                 {
                     Log.Message("SOS2ExpSpinalEngines FoundSpinalComp null");
                     return;
@@ -256,7 +256,7 @@ namespace TheCafFiend
                 Log.Message("Adding thrust for spinal after climb and find");
                 // I hate this but the only thing really not cached from an incomplete spinal is the thrust so just directly add it, what could go wrong?
                 CompEngineTrail foundEngineComp = foundEngine.TryGetComp<CompEngineTrail>();
-                if (null != foundEngineComp)
+                if (foundEngineComp != null)
                 {
                     //Everything but the thrust and the engine in the cache should be already in a good state
                     shipToOperateOn.ThrustRaw += foundEngineComp.Thrust;
@@ -287,19 +287,19 @@ namespace TheCafFiend
                 return;
             }  
             CompSpinalMount FoundSpinalComp = PassedBuilding.TryGetComp<CompSpinalMount>();
-            if (null == FoundSpinalComp)
+            if (FoundSpinalComp == null)
             {
                 return;
             }
             // Log.Message("Found a spinal component in postprefix");
             Building FoundEngine = TheCafFiend.SOS2ExpSpinalEngines.EngineFromSpinal(PassedBuilding);
-            if (null == FoundEngine)
+            if (FoundEngine == null)
             {
                 Log.Message("SOS2ExpSpinalEngines FoundEngine null");
                 return;
             }
             int shipIndex = mapComp.ShipIndexOnVec(PassedBuilding.Position);
-            if (-1 != shipIndex)
+            if (shipIndex != 0)
             {
                 SoShipCache ShipToOperateOn = mapComp.ShipsOnMapNew[shipIndex];
                 // Easier than add, everything else is still there, just dump the thrust, the removal will clear the rest
