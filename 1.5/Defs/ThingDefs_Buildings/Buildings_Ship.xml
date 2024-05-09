@@ -19,7 +19,7 @@
 			<Flammability>0</Flammability>
 		</statBases>
 		<tickerType>Normal</tickerType>
-		<description>A nuclear-powered spinal engine capable of launching a ship into orbit. Will cause pollution. Not suitable for interplanetary travel.\n\nThrust: 3,000+25% per amp\nFuel use: 3 fuel pods+25% per amp, per second\nMax takeoffStrength: 4000+25% per amp</description>
+		<description>A nuclear-powered spinal engine capable of launching a ship into orbit. Will cause pollution. Not suitable for interplanetary travel.\n\nThrust: 3,000+25% per amp\nFuel use: 3 fuel pods+25% per amp, per second\nMax takeoffStrength: 4000</description>
 		<researchPrerequisites>
 			<li>ShipEngine</li>
 			<li>ShipReactor</li>
@@ -29,16 +29,17 @@
 		<receivesSignals>true</receivesSignals>
 		<designationCategory>Ship</designationCategory>
 		<comps>
-			<li Class="CompProperties_SoShipPart">
+			<li Class="SaveOurShip2.CompProps_ShipCachePart">
 				<hermetic>true</hermetic>
 			</li>
-			<li Class="CompProperties_SpinalMount">
+			<li Class="SaveOurShip2.CompProps_SpinalMount">
 				<emits>false</emits>
 				<receives>true</receives>
 				<color>(1.0,0.8,0)</color>
 			</li>
 			<li Class="CompProperties_Power">
 				<compClass>CompPowerTrader</compClass>
+				<basePowerConsumption>100</basePowerConsumption>
 				<transmitsPower>true</transmitsPower>
 			</li>
 			<li Class="CompProperties_Flickable"/>
@@ -51,13 +52,13 @@
 					</thingDefs>
 				</fuelFilter>
 				<consumeFuelOnlyWhenUsed>true</consumeFuelOnlyWhenUsed>
-				<autoRefuelPercent>10</autoRefuelPercent>
+				<autoRefuelPercent>0.9</autoRefuelPercent>
 				<showFuelGizmo>false</showFuelGizmo>
 				<drawOutOfFuelOverlay>false</drawOutOfFuelOverlay>
 				<drawFuelGaugeInMap>false</drawFuelGaugeInMap>
 				<showAllowAutoRefuelToggle>true</showAllowAutoRefuelToggle>
 			</li>
-			<li Class="CompProperties_EngineTrail">
+			<li Class="TheCafFiend.CompProperties_SpinalEngineTrail">
 				<!--graphicData>
 					<texPath>Things/Building/Ship/NuclearEngineTrail</texPath>
 					<graphicClass>Graphic_Multi</graphicClass>
@@ -72,7 +73,7 @@
 			</li>
 		</comps>
 		<placeWorkers>
-			<li>PlaceWorker_ShipEngine</li>
+			<li>SaveOurShip2.PlaceWorker_ShipEngine</li>
 		</placeWorkers>
 		<building>
 			<shipPart>true</shipPart>

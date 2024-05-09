@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ModMetaData>
-  <name>Spinal Engines for SOS2Exp</name>
+  <name>Spinal Engines for SOS2</name>
   <author>TheCafFiend</author>
-  <packageId>TheCafFiend.SOS2ExpSpinalEngines</packageId> 
+  <packageId>TheCafFiend.SOS2SpinalEngines</packageId> 
   <supportedVersions>
-    <li>1.4</li>
+    <li>1.5</li>
   </supportedVersions>
-  <description>This addon mod adds basic spinal engine functionality to SOS2. Only made for use for the exp version for 1.4</description>
+  <description>This addon mod adds basic spinal engine functionality to SOS2. Only made for version for 1.5</description>
   <modDependencies>
 		<li>
 			<packageId>kentington.saveourship2</packageId>
