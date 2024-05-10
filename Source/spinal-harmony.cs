@@ -117,7 +117,7 @@ namespace TheCafFiend
             {
                 previousThingPos -= vecMoveCheck;
                 //Log.Message($"Climbing spinal to find engine, looking at: {previousThingPos}");
-                //Log.Message($"previousThingPos is {previousThingPos} and amp.Position is {amp.Position} and amp.Map.Biome is {amp.Map.Biome}");
+                //Log.Message($"previousThingPos is {previousThingPos} and amp.Position is {buildingPointer.Position} and amp.Map.Biome is {buildingPointer.Map.Biome}");
                 buildingPointer = previousThingPos.GetFirstThingWithComp<CompSpinalMount>(buildingPointer.Map);
                 if (buildingPointer == null)
                 {
@@ -125,7 +125,7 @@ namespace TheCafFiend
                     return null;
                 }
 
-                //Log.Message($"amp.position is {amp.Position} and previousthingpos - vec - vec is {previousThingPos - vecMoveCheck - vecMoveCheck} ampdefname is {amp.def.defName}");
+                //Log.Message($"amp.position is {buildingPointer.Position} and previousthingpos - vec - vec is {previousThingPos - vecMoveCheck - vecMoveCheck} ampdefname is {buildingPointer.def.defName}");
                 if (buildingPointer.Rotation != SpinalObject.Rotation && buildingPointer.def.defName != "Ship_Engine_Spinal") // Engines are backwards! 
                 {
                     Log.Message("SOS2 spinal engines: amps rotation in EngineFromSpinal did not match parent rotation");
@@ -138,7 +138,7 @@ namespace TheCafFiend
                     // Left in case I need this block later, but seems unlikely: Don't care how many are found here, don't setcolour till checking from an engine
                 }
                 //found engine (Note the double -vecMoveCheck!)
-                else if (previousThingPos - vecMoveCheck - vecMoveCheck == buildingPointer.Position && buildingPointer.def.defName == "Ship_Engine_Spinal") // Is there a better check?
+                else if (previousThingPos - vecMoveCheck - vecMoveCheck == buildingPointer.Position && (buildingPointer.TryGetComp<CompSpinalEngineTrail>() != null))
                 {
                     //Log.Message("SOS2 spinal engines: EngineFromSpinal found an engine and is about to return it");
                     return (Building)buildingPointer;
@@ -310,7 +310,7 @@ namespace TheCafFiend
     [HarmonyPatch(typeof(SaveOurShip2.SpaceShipCache), nameof(SaveOurShip2.SpaceShipCache.AddToCache), MethodType.Normal)] 
     public class PatchSpinalSpawn
     {
-        public static bool Prefix(Building b, ref int ___EngineMass, ref float ___ThrustRaw, HashSet<Building> ___Buildings) //prefix due to DoSpawn running addcache on every single cell :/
+        public static bool Prefix(Building b, ref int ___EngineMass, ref float ___ThrustRaw, HashSet<Building> ___Buildings, ref List<CompEngineTrail> ___Engines) //prefix due to DoSpawn running addcache on every single cell :/
         {
             Building argBuilding = b; 
             // Log.Message($"name of added is: {argBuilding.def.defName}");
@@ -326,24 +326,42 @@ namespace TheCafFiend
             Building foundEngine = TheCafFiend.SOS2ExpSpinalEngines.EngineFromSpinal(argBuilding);
             if (foundEngine == null)
             {
-                Log.Message("SOS2 SpinalEngines EngineFromSpinal null");
-                return true;
+                //Log.Message("SOS2 SpinalEngines EngineFromSpinal null");
+                return true; //amp/cap but no engine
             }
             CompSpinalEngineTrail foundEngineComp = foundEngine.TryGetComp<CompSpinalEngineTrail>();
             if (foundEngineComp == null)
             {
-                Log.Error("SOS2Spinal engines foundEngineComp is null!");
+                Log.Error($"SOS2Spinal engines foundEngineComp is null! foundengine {foundEngine.def.defName}");
             }
-            // Log.Message($"About to check for engine/not, then add mass (can't check number, will form) to EngineMass {___EngineMass} foundcomp {foundEngineComp.fullyFormed}");
+            //Log.Message($"About to check for engine/not, then add mass to EngineMass {___EngineMass}");
+            //Log.Message($"foundenginecomp fully formed {foundEngineComp.fullyFormed}");
             if (argBuilding.TryGetComp<CompSpinalEngineTrail>() != null) // Built building is engine itself
             {
-                ___EngineMass += foundEngineComp.supportWeight; //regular add would have already pulled thrust: Just completed spinal, so add mass
+                ___EngineMass += foundEngineComp.supportWeight; //regular add will soon pull thrust: Just completed spinal, so add mass
+                //Log.Message("Added support weight for engine itself, bailing");
+                return true;
             }
-            else if (!foundEngineComp.fullyFormed) // Attempts (by requesting weight/thrust) to build entire spinal, thus only runs once on mapload (successfully)
+            if (foundEngineComp.fullyFormed == false)// Attempts (when requesting weight/thrust) to build entire spinal, thus only runs once on mapload (successfully)
             {
                 //only reached with a spinal component that isn't an engine but found an engine in EngineFromSpinal (aka amp/capacitor)
-                ___EngineMass += foundEngineComp.supportWeight; //calling triggers the spinal recalc and if successfull, sets fullyFormed
-                ___ThrustRaw += foundEngineComp.Thrust; 
+                if (___Engines.Contains(foundEngineComp) && ___Buildings.Contains(foundEngine)) // Building is support, engine already added
+                {
+                    ___EngineMass += foundEngineComp.supportWeight; //calling triggers the spinal recalc and if successfull, sets fullyFormed
+                    ___ThrustRaw += foundEngineComp.Thrust;
+                    return true;
+                }
+                if (foundEngineComp.Thrust != 0) // If every check above bails this will actually *cause* the recalc
+                {
+                    //Log.Message($"thrust to add {foundEngineComp.Thrust} to existing {___ThrustRaw} buildings contain {___Buildings.Contains(foundEngine)} enginelist contains {___Engines.Contains(foundEngineComp)}");
+                    if (!___Engines.Contains(foundEngineComp) && ___Buildings.Contains(foundEngine)) // is engine purged from list BUT still in shipcache? Broken spinal support
+                    {
+                        //Log.Message($"SOS2spinal engines: re-adding engine to internal engine list after spinal supports were removed earlier");
+                        ___Engines.Add(foundEngineComp);
+                        ___EngineMass += foundEngineComp.supportWeight;
+                        ___ThrustRaw += foundEngineComp.Thrust;
+                    }
+                }
             }
             return true;
         }
@@ -352,7 +370,7 @@ namespace TheCafFiend
     [HarmonyPatch(typeof(SaveOurShip2.SpaceShipCache), nameof(SaveOurShip2.SpaceShipCache.RemoveFromCache), MethodType.Normal)]
     public class PatchSpinalDeSpawn
     {
-        public static void Postfix(Building b, ref int ___EngineMass, ref float ___ThrustRaw)
+        public static void Postfix(Building b, ref int ___EngineMass, ref float ___ThrustRaw, ref List<CompEngineTrail> ___Engines)
         {
             Building argBuilding = b;
 
@@ -364,7 +382,7 @@ namespace TheCafFiend
             Building foundEngine = TheCafFiend.SOS2ExpSpinalEngines.EngineFromSpinal(argBuilding);
             if (foundEngine == null)
             {
-                Log.Message("SOS2ExpSpinalEngines EngineFromSpinal null");
+                //Log.Message("SOS2ExpSpinalEngines EngineFromSpinal null");
                 return;
             }
             CompSpinalEngineTrail foundEngineComp = foundEngine.TryGetComp<CompSpinalEngineTrail>();
@@ -372,17 +390,20 @@ namespace TheCafFiend
             {
                 Log.Error("SOS2Spinal engines foundEngineComp is null!");
             }
-            // Log.Message($"About to check for engine/not, then remove mass {foundEngineComp.supportWeight} from EngineMass {___EngineMass}");
-            if (argBuilding.TryGetComp<CompSpinalEngineTrail>() != null) // Built building is engine itself
+            //Log.Message($"About to check for engine/not, then remove mass {foundEngineComp.supportWeight} from EngineMass {___EngineMass}");
+            if (foundEngineComp.fullyFormed == true) // *was* a complete spinal engine, now time to cleanup
             {
-                ___EngineMass -= foundEngineComp.supportWeight; //regular remove would have already pulled thrust: Just broke spinal, so remove mass
-            }
-            else if (foundEngineComp.fullyFormed) // *was* a complete spinal engine, now time to cleanup
-            {
+                if (argBuilding.TryGetComp<CompSpinalEngineTrail>() != null) // Built building is engine itself
+                {
+                    ___EngineMass -= foundEngineComp.supportWeight; //regular remove would have already pulled thrust: Just broke spinal, so remove mass
+                    return;
+                }
                 // Log.Message($"fully formed spinal with a component busted, remove thrust {foundEngineComp.Thrust}");
                 //only reached removing a spinal component that isn't an engine but found an engine in EngineFromSpinal (aka amp/capacitor)
                 ___EngineMass -= foundEngineComp.supportWeight;
-                ___ThrustRaw -= foundEngineComp.Thrust; 
+                ___ThrustRaw -= foundEngineComp.Thrust;
+                foundEngineComp.Off();
+                ___Engines.Remove(foundEngineComp); // Otherwise broken spinals in combat let engine still (visually) fire to no effect
                 foundEngineComp.fullyFormed = false;
             }
 

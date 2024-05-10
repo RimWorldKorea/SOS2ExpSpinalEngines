@@ -65,7 +65,7 @@
 					<drawSize>(7,36.5)</drawSize>
 				</graphicData-->
 				<thrust>6</thrust>
-				<fuelUse>3</fuelUse>
+				<fuelUse>26</fuelUse>
 				<takeOff>true</takeOff>
 			</li>
 			<li>
