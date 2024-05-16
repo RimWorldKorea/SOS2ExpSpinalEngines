@@ -45,7 +45,7 @@ namespace TheCafFiend
                     buildingPointer = previousThingPos.GetFirstThingWithComp<CompSpinalMount>(instance.parent.Map);
                     if (buildingPointer == null)
                     {
-                        Log.Message("SOS2 spinal engines:  new amp at previousthingspos in SpinalRecalc was null!");
+                        //Log.Message("SOS2 spinal engines:  new amp at previousthingspos in SpinalRecalc was null!");
                         return 0; 
                     }
                     // Log.Message("Amp not null");
@@ -75,7 +75,7 @@ namespace TheCafFiend
                     //found unaligned
                     else
                     {
-                        Log.Message($"SOS2 spinal engines: Unaligned in SpinalRecalc: buildingPointer.position: {buildingPointer.Position}, previouspos minus vec: {previousThingPos - vecMoveCheck}");
+                        //Log.Message($"SOS2 spinal engines: Unaligned in SpinalRecalc: buildingPointer.position: {buildingPointer.Position}, previouspos minus vec: {previousThingPos - vecMoveCheck}");
                         amplifierCount = -1;
                         foundNonAmp = true;
                     }
@@ -121,7 +121,7 @@ namespace TheCafFiend
                 buildingPointer = previousThingPos.GetFirstThingWithComp<CompSpinalMount>(buildingPointer.Map);
                 if (buildingPointer == null)
                 {
-                    Log.Message("SOS2 spinal engines: amp in find EngineFromSpinal was null!");
+                    //Log.Message("SOS2 spinal engines: amp in find EngineFromSpinal was null!");
                     return null;
                 }
 
@@ -146,7 +146,7 @@ namespace TheCafFiend
                 //found unaligned
                 else
                 {
-                    Log.Message($"SOS2 spinal engines: Found unaligned in EngineFromSpinal amp.position: {buildingPointer.Position}, previouspos minus vec: {previousThingPos - vecMoveCheck}");
+                    //Log.Message($"SOS2 spinal engines: Found unaligned in EngineFromSpinal amp.position: {buildingPointer.Position}, previouspos minus vec: {previousThingPos - vecMoveCheck}");
                     foundNonAmp = true;
                 }
 
@@ -164,148 +164,6 @@ namespace TheCafFiend
             harmony.PatchAll();
         }
     }
-    // Removed in order to just make an extended CompEngineTrail because honestly it seems a lot cleaner
-    /*[HarmonyPatch(typeof(CompEngineTrail), nameof(CompEngineTrail.Thrust), MethodType.Getter)]
-    public class PatchEngineThrust
-    {
-        public static void Postfix(ref int __result, CompEngineTrail __instance)
-        {
-            // Log.Message("SOS2ExpSpinalEngine PostFix from PatchEngineThrust called");
-            if (__instance.parent.def.defName == "Ship_Engine_Spinal") // This feels filthy I bet there is a better way TODO
-            {
-                float TempAmpBonus = SOS2ExpSpinalEngines.SpinalRecalc(__instance);
-                if (TempAmpBonus != 0)
-                {
-                    Log.Message($"Thrust of spinal returned was: {__result * (1 + TempAmpBonus)}");
-                    __result = (int)(__result * (1 + TempAmpBonus));
-                }
-                else // Incomplete spinal, no thrust for you
-                {
-                    __result = 0;
-                }
-            } // postfix so no "else", already correct value
-                
-        }
-    } */
-    //Cannot? just extend Props because it's not marked virtual so I guess reflection it is. 
-    /* got props marked as virtual (thanks SonicTHI!) so removed this nasty, not-correctly-working-anyhow, bit 
-    [HarmonyPatch(typeof(CompEngineTrail), nameof(CompEngineTrail.Props), MethodType.Getter)]
-    public class PatchEngineFuel
-    {
-        public static void Postfix(ref CompProps_EngineTrail __result, CompEngineTrail __instance)
-        {
-            // Log.Message("SOS2ExpSE Postfix enginetrail props called");
-            if (__instance.parent.def.defName == "Ship_Engine_Spinal") // This feels filthy I bet there is a better way TODO
-            {
-                float tempAmpBonus = SOS2ExpSpinalEngines.SpinalRecalc(__instance);
-                if (tempAmpBonus != 0)
-                {
-                    Log.Message($"Spinal Engine fuel (OG {__result.fuelUse}) postfixed value (Bonus {tempAmpBonus}) is: {__result.fuelUse * (1 + tempAmpBonus)}");
-                    __result.fuelUse = (int)(__result.fuelUse * (1 + tempAmpBonus));
-                }
-                else // Incomplete spinal engine, no fuel use
-                {
-                     __result.fuelUse = 0;
-                }
-            } // postfix so no "else", already correct value
-        }
-    } */
-    /*[HarmonyPatch(typeof(SaveOurShip2.DoSpawn), nameof(SaveOurShip2.DoSpawn.OnSpawn), MethodType.Normal)] // postfixing a postfix feels wrong 
-    public class PatchSpinalSpawn
-    {
-        // quick and ugly info gathering
-        public static bool Prefix(object[] __args)
-        {
-            if (__args[0] == null || __args[1] == null)
-            {
-                Log.Error("Did something change in SOS2 DoSpawn? Invalid for patching from SOS2ExpSpinalEngines");
-                return false;
-            }
-            if ((bool)__args[2]) //onload
-                return true;
-            Building argBuilding = (Building)__args[0];
-            var mapComp = argBuilding.Map.GetComponent<ShipMapComp>();
-            int shipIndex = mapComp.ShipIndexOnVec(argBuilding.Position);
-            SpaceShipCache shipToOperateOn = mapComp.ShipsOnMap[shipIndex];
-            Log.Message($"postfixed postfix DoSpawn PatchSpinalSpawn buildingname is {argBuilding.def.defName}");
-            Log.Message($"sos2expse adding, ship weight: {shipToOperateOn.MassSum}, ship thrust {shipToOperateOn.ThrustRaw} ratio {shipToOperateOn.ThrustRatio}");
-            return true;
-        }
-        public static void Postfix(object[] __args)
-        {
-            //Log.Message("SOS2ExpSE Postfix Postfix DoSpawn called");
-            // Can't say I care for all this but OnSpawn is static so I gotta steal the args and rebuild half of it apparently
-            if (__args[0] == null || __args[1] == null || __args[2] == null)
-            {
-                Log.Error("Did something change in SOS2OnSpawn? Invalid for patching from SOS2ExpSpinalEngines");
-                return;
-            }
-            if ((bool)__args[2]) //onspawn
-                return;
-            Map argMap = (Map)__args[1];
-            Building argBuilding = (Building)__args[0];
-            if (argBuilding.TryGetComp<CompSpinalMount>() == null)
-            {
-                //Log.Message("SOS2ExpSpinalEngines SpinalComp null");
-                return; //Not spinal-related, bail ASAP
-            }
-            var mapComp = argMap.GetComponent<ShipMapComp>();
-            if (mapComp.CacheOff || ShipInteriorMod2.MoveShipFlag || mapComp.ShipsOnMap.NullOrEmpty())
-            {
-                return;
-            }
-            foreach (IntVec3 vec in GenAdj.CellsOccupiedBy(argBuilding))
-            { 
-                // Log.Message($"part checking for on ship at {vec}");
-                int shipIndex = mapComp.ShipIndexOnVec(vec);
-                if (shipIndex == -1)
-                {
-                    continue; // Might not be an error, may just be partly on ship, or not on at all, check other parts
-                }
-                //Log.Message($"{shipIndex}");
-                SpaceShipCache shipToOperateOn = mapComp.ShipsOnMap[shipIndex];
-                Log.Message($"sos2expse postfix adding, ship weight: {shipToOperateOn.MassSum}, ship thrust {shipToOperateOn.ThrustRaw}, ratio {shipToOperateOn.ThrustRatio}");
-                //Log.Message("Found a spinal component in postpostfix");
-                Building foundEngine = TheCafFiend.SOS2ExpSpinalEngines.EngineFromSpinal(argBuilding);
-                if (foundEngine == null)
-                {
-                    Log.Message("SOS2ExpSpinalEngines EngineFromSpinal null");
-                    return;
-                }
-                // Log.Message("Adding thrust for spinal after climb and find");
-                CompEngineTrail foundEngineComp = foundEngine.TryGetComp<CompSpinalEngineTrail>();
-                if (foundEngineComp == null)
-                {
-                    Log.Error("SOS2Spinal engines foundEngineComp is null!");
-                }
-                // This will break (Well, wrong results) if the ampbonus is not 0.25 for some reason
-                // magic numbers: 0.25 to figure out how many amps are attached, amp is 1X5 (5), cap is 3X5 (15), this makes total area
-                // regular AddToCache already gets the engine, only assigning 50% of the enginemass because caps extra and it costs a ton more
-                int spinalEngineMass = (int)(((SOS2ExpSpinalEngines.SpinalRecalc(foundEngineComp) / 0.25f) * 5) + 15) * 30;
-                if (argBuilding.TryGetComp<CompSpinalEngineTrail>() != null) // Built building is engine itself
-                {
-                   /* Log.Message($"Postfixed postfix DoSpawn PatchSpinalSpawn buildingname is {argBuilding.def.defName}");
-                    if (shipToOperateOn.Buildings.Contains(argBuilding))
-                    {
-                        Log.Message("shipCache contains spinal engine still");
-                    }
-                    Log.Message($"compenginetrail thrust is: {argBuilding.TryGetComp<CompEngineTrail>().Thrust}");
-                    Log.Message($"compshipcachepart is: {argBuilding.TryGetComp<CompShipCachePart>()}, shippart is: {argBuilding.def.building.shipPart}");
-                    Log.Message($"sos2se spawn postfix bailing due to found engine"); 
-                    shipToOperateOn.EngineMass += spinalEngineMass;
-                    Log.Message($"sos2expse postfix added now, ship weight: {shipToOperateOn.MassSum}, ship thrust {shipToOperateOn.ThrustRaw}, ratio {shipToOperateOn.ThrustRatio}");
-                    return;
-                }
-                // If we made it this far, the addition was a spinal engine component but *not* the engine itself so we need special handling
-                //Everything but the thrust and the additional EngineMass in the cache should be already in a good state
-                shipToOperateOn.ThrustRaw += foundEngineComp.Thrust;
-                shipToOperateOn.EngineMass += spinalEngineMass;
-                Log.Message($"sos2expse postfix added now, ship weight: {shipToOperateOn.MassSum}, ship thrust {shipToOperateOn.ThrustRaw}, ratio {shipToOperateOn.ThrustRatio}");
-                return; // Don't check other cells, causes bugs
-            }
-        }   
-
-    }*/
 
     [HarmonyPatch(typeof(SaveOurShip2.SpaceShipCache), nameof(SaveOurShip2.SpaceShipCache.AddToCache), MethodType.Normal)] 
     public class PatchSpinalSpawn
@@ -409,85 +267,6 @@ namespace TheCafFiend
 
         }
     }
-    /*[HarmonyPatch(typeof(SaveOurShip2.DoPreDeSpawn), nameof(SaveOurShip2.DoPreDeSpawn.PreDeSpawn), MethodType.Normal)] // Oh prefixing a prefix, clearly better
-    public class PatchSpinalDespawn
-    {
-        // quick and ugly info gathering
-        /*public static bool Prefix(object[] __args)
-        {
-            if (__args[0] == null || __args[1] == null)
-            {
-                Log.Error("Did something change in SOS2 DoPreDeSpawn? Invalid for patching from SOS2ExpSpinalEngines");
-                return false;
-            }
-            Building argBuilding = (Building)__args[0];
-            var mapComp = argBuilding.Map.GetComponent<ShipMapComp>();
-            int shipIndex = mapComp.ShipIndexOnVec(argBuilding.Position);
-            SpaceShipCache shipToOperateOn = mapComp.ShipsOnMap[shipIndex];
-            Log.Message($"*PRE*fixed prefix PreDeSpawn PatchSpinalDespawn buildingname is {argBuilding.def.defName}");
-            Log.Message($"sos2expse removing, ship weight: {shipToOperateOn.MassSum}, ship thrust {shipToOperateOn.ThrustRaw} ratio {shipToOperateOn.ThrustRatio}");
-            return true;
-        }
-        // See previous complaint about static OnSpawn, s/onSpawn/PreDeSpawn
-        public static bool Prefix(object[] __args)
-        {
-            if (__args[0] == null || __args[1] == null)
-            {
-                Log.Error("Did something change in SOS2 DoPreDeSpawn? Invalid for patching from SOS2ExpSpinalEngines");
-                return false;
-            }
-            Building argBuilding = (Building)__args[0];
-            var mapComp = argBuilding.Map.GetComponent<ShipMapComp>();
-            if (mapComp.CacheOff || ShipInteriorMod2.MoveShipFlag || mapComp.ShipsOnMap.NullOrEmpty())
-            {
-                return true; // This means re-checking in base SOS DoPreDeSpawn but a false will exit building DeSpawn I think?
-            }
-            CompSpinalMount FoundSpinalComp = argBuilding.TryGetComp<CompSpinalMount>();
-            if (FoundSpinalComp == null)
-            {
-                // Log.Message("Despawn on non-spinal, returning to original");
-                return true;
-            }
-            int shipIndex = mapComp.ShipIndexOnVec(argBuilding.Position);
-            if (shipIndex == -1)
-            {
-                Log.Error("SOS2SpinalEngines null shipindex!");
-                return false;
-            }
-            SpaceShipCache shipToOperateOn = mapComp.ShipsOnMap[shipIndex];
-            Building foundEngine = TheCafFiend.SOS2ExpSpinalEngines.EngineFromSpinal(argBuilding);
-            if (foundEngine == null)
-            {
-                Log.Message("SOS2ExpSpinalEngines FoundEngine null");
-                return true;
-            }
-            CompEngineTrail foundEngineComp = foundEngine.TryGetComp<CompSpinalEngineTrail>();
-            //Log.Message($"Prefixed prefix PreDeSpawn PatchSpinalDespawn buildingname is {argBuilding.def.defName}");
-            //Log.Message($"sos2expse removing, ship weight: {shipToOperateOn.MassSum}, ship thrust {shipToOperateOn.ThrustRaw} ratio {shipToOperateOn.ThrustRatio}");
-            // This will break (Well, wrong results) if the ampbonus is not 0.25 for some reason
-            // magic numbers: 0.25 to figure out how many amps are attached, amp is 1X5 (5), cap is 3X5 (15), this makes total area 
-            // regular AddToCache already gets the engine, only assigning 50% of the enginemass because caps extra and it costs a ton more
-            int spinalEngineMass = (int)(((SOS2ExpSpinalEngines.SpinalRecalc(foundEngineComp) / 0.25f) * 5) + 15) * 30;
-            if (argBuilding.TryGetComp<CompSpinalEngineTrail>() != null)
-            {
-                /*if (shipToOperateOn.Buildings.Contains(argBuilding))
-                {
-                    Log.Message("shipCache contains spinal engine on prefix of DoPreDespawn, which it should");
-                }
-                Log.Message($"sos2se remove postfix bailing due to found engine");
-                Log.Message($"compenginetrail thrust is: {argBuilding.TryGetComp<CompEngineTrail>().Thrust}");
-                Log.Message($"compshipcachepart is: {argBuilding.TryGetComp<CompShipCachePart>()}, shippart is: {argBuilding.def.building.shipPart}");
-                shipToOperateOn.EngineMass -= spinalEngineMass;
-                return true;
-            }
-            //Only fires on amp/capacitor removal making nonfunctional engine!
-            shipToOperateOn.EngineMass -= spinalEngineMass;
-            shipToOperateOn.ThrustRaw -= foundEngineComp.Thrust;
-            Log.Message($"sos2expse removed, ship weight: {shipToOperateOn.MassSum} , ship thrust  {shipToOperateOn.ThrustRaw} ratio {shipToOperateOn.ThrustRatio}");
-            return true;
-
-        }
-    }*/
 }
 
 
