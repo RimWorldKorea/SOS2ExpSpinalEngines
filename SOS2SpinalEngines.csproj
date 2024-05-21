@@ -67,21 +67,28 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Source\CompProperties_SpinalEngineTrail.cs" />
+    <Compile Include="Source\CompProperties_SpinalMount.cs" />
+    <Compile Include="Source\CompSpinalEngineMount.cs" />
+    <Compile Include="Source\CompSpinalEnginePowerTrader.cs" />
     <Compile Include="Source\CompSpinalEngineTrail.cs" />
+    <Compile Include="Source\PlaceWorker_NeedsSpinalEngineMount.cs" />
     <Compile Include="Source\spinal-harmony.cs" />
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="1.5\Defs\ThingDefs_Buildings\Buildings_Ship.xml" />
     <Content Include="About\About.xml" />
     <Content Include="About\preview.png" />
     <Content Include="Assemblies\SOS2SpinalEngines.dll" />
+    <Content Include="Textures\Things\Building\Ship\SpinalEngine_ExhaustBell.png" />
+    <Content Include="Textures\Things\Building\Ship\SpinalEngine_FuelTankEnd.png" />
+    <Content Include="Textures\Things\Building\Ship\SpinalEngine_FuelTankMiddle.png" />
+    <Content Include="Textures\Things\Building\Ship\SpinalEngine_FuelTankStart.png" />
+    <Content Include="Textures\Things\Building\Ship\SpinalEngine_Solenoid.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\Settings.settings" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="1.5\Defs\ThingDefs_Buildings\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
