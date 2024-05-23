@@ -89,7 +89,7 @@ namespace TheCafFiend
                         return null;
                     }
                 }
-                Log.Message($"Found amps on spinal engine: ThrustBoost: {toReturn.thrustAmp}, fuelstart is {foundFuelStart}");
+                //Log.Message($"Found amps on spinal engine: ThrustBoost: {toReturn.thrustAmp}, fuelstart is {foundFuelStart}");
                 if (toReturn.thrustAmp ==0)
                 {
                     toReturn.playerError = "No engine accelerators found attached to engine!";
@@ -105,12 +105,12 @@ namespace TheCafFiend
                 previousThingPos -= vecMoveCheck; // one extra for the size of the fuelEnd! 
                 while (!foundNonFuelAmp)
                 {
-                    Log.Message($"SOS2 spinal engines: SpinalRecalc: buildingPointer.position: {buildingPointer.Position}, previouspos: {previousThingPos}");
+                    //Log.Message($"SOS2 spinal engines: SpinalRecalc: buildingPointer.position: {buildingPointer.Position}, previouspos: {previousThingPos}");
                     previousThingPos -= vecMoveCheck;
                     buildingPointer = previousThingPos.GetFirstThingWithComp<CompSpinalEngineMount>(instance.parent.Map);
                     if (buildingPointer == null)
                     {
-                        Log.Message($"SOS2 spinal engines:  new *fuel*amp at previousthingspos in SpinalRecalc was null");
+                        //Log.Message($"SOS2 spinal engines:  new *fuel*amp at previousthingspos in SpinalRecalc was null");
                         break;
                     }
                     CompSpinalEngineMount ampComp = buildingPointer.TryGetComp<CompSpinalEngineMount>();
@@ -182,8 +182,8 @@ namespace TheCafFiend
                     previousThingPos -= vecMoveCheck; // Jump one more if it's a tankend, to reach the amp
                 }
                 previousThingPos -= vecMoveCheck;
-                Log.Message($"Climbing spinal to find engine, looking at: {previousThingPos}");
-                Log.Message($"previousThingPos is {previousThingPos} and BuildingPointer.Position is {buildingPointer.Position}");
+                //Log.Message($"Climbing spinal to find engine, looking at: {previousThingPos}");
+                //Log.Message($"previousThingPos is {previousThingPos} and BuildingPointer.Position is {buildingPointer.Position}");
                 buildingPointer = previousThingPos.GetFirstThingWithComp<CompSpinalMount>(buildingPointer.Map);
                 if (buildingPointer == null)
                 {
@@ -191,11 +191,11 @@ namespace TheCafFiend
                     return null;
                 }
 
-                Log.Message($"BuildingPointer.position is {buildingPointer.Position} and previousthingpos - vec - vec is {previousThingPos - vecMoveCheck - vecMoveCheck} pointerdefname is {buildingPointer.def.defName}");
-                Log.Message($"pointer rot {buildingPointer.Rotation}, original spinalobject is {SpinalObject.def.defName}, rot {SpinalObject.Rotation}");
+                //Log.Message($"BuildingPointer.position is {buildingPointer.Position} and previousthingpos - vec - vec is {previousThingPos - vecMoveCheck - vecMoveCheck} pointerdefname is {buildingPointer.def.defName}");
+                //Log.Message($"pointer rot {buildingPointer.Rotation}, original spinalobject is {SpinalObject.def.defName}, rot {SpinalObject.Rotation}");
                 if (buildingPointer.Rotation != SpinalObject.Rotation && buildingPointer.TryGetComp<CompSpinalEngineTrail>() == null) // Engines are backwards! 
                 {
-                    Log.Message("SOS2 spinal engines: amps rotation in EngineFromSpinal did not match parent rotation");
+                    //Log.Message("SOS2 spinal engines: amps rotation in EngineFromSpinal did not match parent rotation");
                     break;
                 }
                 else if (buildingPointer.Position == previousThingPos)
@@ -207,13 +207,13 @@ namespace TheCafFiend
                 //found engine (Note the double -vecMoveCheck!)
                 else if (previousThingPos - vecMoveCheck - vecMoveCheck == buildingPointer.Position && (buildingPointer.TryGetComp<CompSpinalEngineTrail>() != null))
                 {
-                    Log.Message("SOS2 spinal engines: EngineFromSpinal found an engine and is about to return it");
+                    //Log.Message("SOS2 spinal engines: EngineFromSpinal found an engine and is about to return it");
                     return (Building)buildingPointer;
                 }
                 //found unaligned
                 else
                 {
-                    Log.Message($"SOS2 spinal engines: Found unaligned in EngineFromSpinal amp.position: {buildingPointer.Position}, previouspos minus vec: {previousThingPos - vecMoveCheck}");
+                    //Log.Message($"SOS2 spinal engines: Found unaligned in EngineFromSpinal amp.position: {buildingPointer.Position}, previouspos minus vec: {previousThingPos - vecMoveCheck}");
                     foundNonAmp = true;
                 }
 
@@ -330,6 +330,7 @@ namespace TheCafFiend
                 ___ThrustRaw -= foundEngineComp.Thrust;
                 foundEngineComp.Off();
                 ___Engines.Remove(foundEngineComp); // Otherwise broken spinals in combat let engine still (visually) fire to no effect
+                foundEngineComp.reset(); //something was removed, start from scratch!
                 foundEngineComp.currentError = $"A supporting {argBuilding.def.label} of the spinal engine was removed!";
                 foundEngineComp.fullyFormed = false;
             }
