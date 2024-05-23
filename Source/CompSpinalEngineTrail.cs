@@ -133,19 +133,22 @@ namespace TheCafFiend
             }
         }
 
+        public void reset()
+        {
+            cachedThrust = 0;
+            cachedMass = 0;
+            cachedFuelUse = 0;
+            cachedFuelAllowed = 0;
+            cachedPowerUse = 0;
+            cachedError = "Spinal engine isn't fully formed! Check for engine accelerators, and all three components of the fuel infrastructure!";
+        }
         private void calc()
         {
             returnValue wasReturned = SOS2SpinalEngines.SpinalRecalc(this);
             if (wasReturned == null) // null basically means something went wrong: Multiblock broken, re-set to zeros
             {
-                cachedThrust = 0;
-                cachedMass = 0;
-                cachedFuelUse = 0;
-                cachedFuelAllowed = 0;
-                cachedPowerUse = 0;
-                cachedError = "Spinal engine isn't fully formed! Check for engine accelerators, and all three components of the fuel infrastructure!";
+                reset();
                 return;
-
             }
             else if(wasReturned.fullyFormed == false)
             {
@@ -153,13 +156,14 @@ namespace TheCafFiend
             }
             else
             {
+                reset(); //I can't see this being needed but eh 
                 cachedThrust = (int)(base.Props.thrust * (1 + wasReturned.thrustAmp)); 
                 cachedFuelUse = (int)(base.Props.fuelUse * (1 + wasReturned.fuelAmp));
                 CompSpinalEnginePowerTrader powerComp = parent.TryGetComp<CompSpinalEnginePowerTrader>();
                 cachedPowerUse += (int)(powerComp.Props.PowerConsumption * (1 + wasReturned.powerUseAmp));
-                Log.Message($"sos2spinal engines base.powercomp.poweroutput from calc returned poweruse is {wasReturned.powerUseAmp} cached is {cachedPowerUse}");
+                //Log.Message($"sos2spinal engines base.powercomp.poweroutput from calc returned poweruse is {wasReturned.powerUseAmp} cached is {cachedPowerUse}");
                 powerComp.PowerOutput = 0 - cachedPowerUse; 
-                Log.Message($"sos2spinal engines modified comppowertrader PowerOutput on {parent.GetUniqueLoadID()} to {powerComp.PowerOutput}");
+                //Log.Message($"sos2spinal engines modified comppowertrader PowerOutput on {parent.GetUniqueLoadID()} to {powerComp.PowerOutput}");
                 cachedFuelAllowed += (int)(this.Properties.fuelAllowed * (1 + wasReturned.fuelAllowAmp)); // No current need to record it? Player info card?
                 //Log.Message($"base fueluse reads {base.Props.fuelUse} Fueluse is: {cachedFuelUse}");
                 // This will break (Well, wrong results) if the ampbonus is not 0.25 for some reason
