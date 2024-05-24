@@ -61,7 +61,7 @@
 		<designatorDropdown>ShipEngines_Spinal</designatorDropdown>
 		<description>Consumes significant power in order to accelerate fuel before ignition. Attach one or more of these to a fuel support system, then add an exhaust to determine the engine type.\n\nIncreases base thrust by 25%, but also increases fuel consumption by 5%.\n\nMore accelerators will require more (heavy) fuel support infrastructure at the end of the spinal engine to support them: These high-powered versions need less fuel support but significantly more power used</description>
 		<graphicData>
-			<texPath>Things/Building/Ship/SpinalEngine_Solenoid</texPath>
+			<texPath>Things/Building/Ship/SpinalEngine_Solenoid_HighPower</texPath>
 			<graphicClass>Graphic_Multi</graphicClass>
 			<shaderType>CutoutComplex</shaderType>
 			<drawSize>(5,1)</drawSize>
@@ -115,7 +115,7 @@
 		<designatorDropdown>ShipEngines_Spinal</designatorDropdown>
 		<description>Utilizes exotic fields to accelerate fuel before ignition. Attach one or more of these to a fuel support system, then add an exhaust to determine the engine type.\n\nIncreases base thrust by 25%, but also increases fuel consumption by 1%.\n\nThese accelerators require very minimal fuel support infrastructure at the end of the spinal engine to support them, while requiring truly incredible amounts of power to operate</description>
 		<graphicData>
-			<texPath>Things/Building/Ship/SpinalEngine_Solenoid</texPath>
+			<texPath>Things/Building/Ship/SpinalEngine_Solenoid_Archo</texPath>
 			<graphicClass>Graphic_Multi</graphicClass>
 			<shaderType>CutoutComplex</shaderType>
 			<drawSize>(5,1)</drawSize>
