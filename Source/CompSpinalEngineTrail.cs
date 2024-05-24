@@ -135,6 +135,7 @@ namespace TheCafFiend
 
         public void reset()
         {
+            //Log.Message($"SOS2spinal engines: resetting: thrust {cachedThrust} mass {cachedMass} fueluse {cachedFuelUse} fuelallowed {cachedFuelAllowed} power {cachedPowerUse}");
             cachedThrust = 0;
             cachedMass = 0;
             cachedFuelUse = 0;
