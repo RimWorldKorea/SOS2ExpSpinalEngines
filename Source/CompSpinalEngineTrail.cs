@@ -11,17 +11,19 @@ namespace TheCafFiend
         public override string CompInspectStringExtra()
         {
             StringBuilder stringBuilder = new StringBuilder();
+            
             if (fullyFormed)
             {
-                stringBuilder.Append($"Thrust: {cachedThrust * 500} Fuel Use: {cachedFuelUse}/s");
+                stringBuilder.Append($"Fuel burn rate per second: {cachedFuelUse} of {cachedFuelAllowed} supported");
+                stringBuilder.AppendInNewLine($"Thrust: {cachedThrust * 500}");
             }
             else
             {
-                stringBuilder.Append(cachedError);
+                stringBuilder.Append(cachedError.Colorize(UnityEngine.Color.red));
             }
             return stringBuilder.ToString();
         }
-        public virtual CompProperties_SpinalEngineTrail Properties //Wait is this dirty I just want to be clear it's not hiding etc hrm
+        public virtual CompProperties_SpinalEngineTrail Properties //Wait is this dirty I just want to be clear it's not hiding hrm
         {
             get { return props as CompProperties_SpinalEngineTrail; }
         }
@@ -29,7 +31,7 @@ namespace TheCafFiend
         {
             public float thrustAmp;
             public float fuelAmp;
-            public float fuelAllowAmp;
+            public float fuelAllowAmp; // TODO FIX ME lord I hate floats
             public float powerUseAmp;
             public int supportWeight;
             public string playerError;
@@ -38,10 +40,10 @@ namespace TheCafFiend
         private int cachedThrust = 0;
         private int cachedMass = 0; // add/remove on the *engine* does this itself, this is only amps+caps
         public bool fullyFormed = false;
-        //private float supportWeightMulti = 0.66f;
+        //private float supportWeightMulti = 0.66f; //deprecated
         private int cachedFuelUse = 0;
         private int cachedPowerUse = 0;
-        private int cachedFuelAllowed = 0;
+        private int cachedFuelAllowed = 0; //not used but should it be?
         private string cachedError = "Spinal engine isn't fully formed! Check for engine accelerators, and all three components of the fuel infrastructure!";
         public override int Thrust
         {
@@ -65,7 +67,7 @@ namespace TheCafFiend
                 }
             }
         }
-        public string currentError
+        public string currentError // Feels a little silly to have a setter just for this, maybe cachedError should just be public? 
         {
             set
             {
@@ -78,6 +80,7 @@ namespace TheCafFiend
             {
                 if (parent.TryGetComp<CompSpinalEngineTrail>() == null)
                 {
+                    Log.Message("SOS2 spinal engines: somehow hit powerUse from a non-compspinalenginetrail?");
                     return (int)(parent.TryGetComp<CompPowerTrader>().Props.PowerConsumption); // pretty? Sure this cannot happen but in case
                 }
                 if (fullyFormed)
@@ -153,23 +156,19 @@ namespace TheCafFiend
             }
             else if(wasReturned.fullyFormed == false)
             {
-                cachedError = wasReturned.playerError;
+                cachedError = wasReturned.playerError; //cleanest way I could think of to surface errors? 
             }
             else
             {
                 reset(); //I can't see this being needed but eh 
                 cachedThrust = (int)(base.Props.thrust * (1 + wasReturned.thrustAmp)); 
                 cachedFuelUse = (int)(base.Props.fuelUse * (1 + wasReturned.fuelAmp));
-                CompSpinalEnginePowerTrader powerComp = parent.TryGetComp<CompSpinalEnginePowerTrader>();
-                cachedPowerUse += (int)(powerComp.Props.PowerConsumption * (1 + wasReturned.powerUseAmp));
+                CompSpinalEnginePowerTrader powerComp = parent.TryGetComp<CompSpinalEnginePowerTrader>(); // removing this makes the game NRE?
+                cachedPowerUse += (int)(powerComp.Props.PowerConsumption * (1 + wasReturned.powerUseAmp));// Ok I guess I keep powerComp?!
                 //Log.Message($"sos2spinal engines base.powercomp.poweroutput from calc returned poweruse is {wasReturned.powerUseAmp} cached is {cachedPowerUse}");
                 powerComp.PowerOutput = 0 - cachedPowerUse; 
                 //Log.Message($"sos2spinal engines modified comppowertrader PowerOutput on {parent.GetUniqueLoadID()} to {powerComp.PowerOutput}");
                 cachedFuelAllowed += (int)(this.Properties.fuelAllowed * (1 + wasReturned.fuelAllowAmp)); // No current need to record it? Player info card?
-                //Log.Message($"base fueluse reads {base.Props.fuelUse} Fueluse is: {cachedFuelUse}");
-                // This will break (Well, wrong results) if the ampbonus is not 0.25 for some reason
-                // magic numbers: 0.25 to figure out how many amps are attached, amp is 1X5 (5), cap is 3X5 (15), this makes total area
-                // regular AddToCache already gets the engine, only assigning supportWeightMulti of the enginemass because caps extra volume and it costs a ton more
                 cachedMass = (int)(wasReturned.supportWeight);
                 fullyFormed = true;
             }

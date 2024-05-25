@@ -75,8 +75,6 @@
     <Compile Include="Source\spinal-harmony.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="About\About.xml" />
-    <Content Include="About\preview.png" />
     <Content Include="Assemblies\SOS2SpinalEngines.dll" />
     <Content Include="Textures\Things\Building\Ship\SpinalEngine_ExhaustBell.png" />
     <Content Include="Textures\Things\Building\Ship\SpinalEngine_FuelTankEnd.png" />
@@ -89,6 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="1.5\Defs\ThingDefs_Buildings\" />
+    <Folder Include="About\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

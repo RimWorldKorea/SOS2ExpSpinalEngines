@@ -98,7 +98,7 @@
 		<thingClass>Building</thingClass>
 		<drawerType>MapMeshAndRealTime</drawerType>
 		<graphicData>
-			<texPath>Things/Building/Ship/SpinalEngine_ExhaustBell</texPath>
+			<texPath>Things/Building/Ship/SpinalEngine_ExhaustBell_Nuclear</texPath>
 			<graphicClass>Graphic_Multi</graphicClass>
 			<shaderType>CutoutComplex</shaderType>
 			<drawSize>(5,5)</drawSize>
