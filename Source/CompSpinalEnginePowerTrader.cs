@@ -10,7 +10,7 @@ namespace TheCafFiend
         {
             base.SetUpPowerVars();
             CompSpinalEngineTrail engineToModify = parent.TryGetComp<CompSpinalEngineTrail>();
-            if (engineToModify == null)
+            if (engineToModify == null) // Like this.... Probably? can't happen but just in case
             {
                 Log.Message("SOS2 spinal engines: SpinalEnginePowerTrader didn't find an engine?");
                 return;

@@ -87,15 +87,17 @@
 			<ComponentSpacer>6</ComponentSpacer>
 		</costList>
 		<comps>
+			<li Class="CompProperties_Glower">
+				<glowRadius>6</glowRadius>
+				<glowColor>(30,30,300,0)</glowColor>
+				<colorPickerEnabled>true</colorPickerEnabled>
+			</li>
 			<li Class="TheCafFiend.CompProperties_SpinalEngineMount">
 				<emits>true</emits>
 				<receives>true</receives>
 				<thrustAmp>0.25</thrustAmp>
 				<fuelUseAmp>0.05</fuelUseAmp>
 				<powerUseAmp>5.00</powerUseAmp> <!-- not a typo-->
-			</li>
-			<li>
-				<compClass>CompColorable</compClass>
 			</li>
 		</comps>
 		<placeWorkers>

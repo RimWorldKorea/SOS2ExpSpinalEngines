@@ -9,7 +9,7 @@ namespace TheCafFiend
         public float thrustAmp = 0f;
         public float fuelUseAmp = 0f;
         public float fuelAllowAmp = 0f;
-        public float powerUseAmp = 0f; //extend power for this?
+        public float powerUseAmp = 0f; 
         public bool fuelStackEnd = false;
         public CompProperties_SpinalEngineMount() 
         {
