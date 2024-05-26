@@ -75,6 +75,7 @@
 			<li>
 				<compClass>CompColorable</compClass>
 			</li>
+			<!-- not used but avoids a minor error from SOS2 -->
 			<li Class="Rimefeller.CompProperties_Pipe" MayRequire="Dubwise.Rimefeller"/>
 		</comps>
 		<placeWorkers>
@@ -161,7 +162,7 @@
 			</li>
 			<li>
 				<compClass>CompColorable</compClass>
-			</li>
+			</li> <!-- not used but avoids a minor error from SOS2 -->
 		</comps>
 		<placeWorkers>
 			<li>TheCafFiend.PlaceWorker_NeedsSpinalEngineMount</li>
