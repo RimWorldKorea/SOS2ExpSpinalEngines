@@ -14,7 +14,7 @@ namespace TheCafFiend
             // add any other startup shenanigins
         }
         
-        public static CompSpinalEngineTrail.returnValue SpinalRecalc(CompSpinalEngineTrail instance) 
+        public static CompSpinalEngineTrail.ReturnValue SpinalRecalc(CompSpinalEngineTrail instance) 
         {
             bool foundNonAmp = false;
             bool foundFuelStart = false;
@@ -23,7 +23,7 @@ namespace TheCafFiend
             Thing buildingPointer = instance.parent;
             IntVec3 previousThingPos;
             IntVec3 vecMoveCheck;
-            CompSpinalEngineTrail.returnValue toReturn = new CompSpinalEngineTrail.returnValue
+            CompSpinalEngineTrail.ReturnValue toReturn = new CompSpinalEngineTrail.ReturnValue
             {
                 fullyFormed = false
             };
@@ -52,7 +52,7 @@ namespace TheCafFiend
                 if (buildingPointer == null)
                 {
                     //Log.Message($"SOS2 spinal engines:  new amp at {previousThingPos} in SpinalRecalc was null!");
-                    foundNonAmp = true;
+                    foundNonAmp = true; //Currently unused in this case but might need it for a later plan
                     break;
                 }
                 CompSpinalEngineMount ampComp = buildingPointer.TryGetComp<CompSpinalEngineMount>();
@@ -254,7 +254,7 @@ namespace TheCafFiend
             }
             if (argBuilding.TryGetComp<CompSpinalEngineTrail>() != null) // Built building is engine itself
             {
-                ___EngineMass += foundEngineComp.supportWeight; //regular add will soon pull thrust: Just completed spinal, so add mass
+                ___EngineMass += foundEngineComp.SupportWeight; //regular add will soon pull thrust: Just completed spinal, so add mass
                 return true;
             }
             if (foundEngineComp.fullyFormed == false)
@@ -262,7 +262,7 @@ namespace TheCafFiend
                 //only reached with a spinal component that isn't an engine but found an engine in EngineFromSpinal (aka amp/capacitor)
                 if (___Engines.Contains(foundEngineComp) && ___Buildings.Contains(foundEngine)) // Building is support, engine already added
                 {
-                    ___EngineMass += foundEngineComp.supportWeight; //calling triggers the spinal recalc and if successfull, sets fullyFormed
+                    ___EngineMass += foundEngineComp.SupportWeight; //calling triggers the spinal recalc and if successfull, sets fullyFormed
                     ___ThrustRaw += foundEngineComp.Thrust; //Direct manipulation of the cache: Best I can think of but is there better?
                     return true;
                 }
@@ -272,7 +272,7 @@ namespace TheCafFiend
                     {
                         //Log.Message($"SOS2spinal engines: re-adding engine to internal engine list after spinal supports were removed earlier");
                         ___Engines.Add(foundEngineComp);
-                        ___EngineMass += foundEngineComp.supportWeight;
+                        ___EngineMass += foundEngineComp.SupportWeight;
                         ___ThrustRaw += foundEngineComp.Thrust;
                     }
                 }
@@ -309,17 +309,17 @@ namespace TheCafFiend
             {
                 if (argBuilding.TryGetComp<CompSpinalEngineTrail>() != null) // Built building is engine itself
                 {
-                    ___EngineMass -= foundEngineComp.supportWeight; //regular remove would have already pulled thrust: Just broke spinal, so remove mass
+                    ___EngineMass -= foundEngineComp.SupportWeight; //regular remove would have already pulled thrust: Just broke spinal, so remove mass
                     return;
                 }
                 // Log.Message($"SOS2 Spinal Engines: fully formed spinal with a component busted, remove thrust {foundEngineComp.Thrust}");
                 //only reached removing a spinal component that isn't an engine but found an engine in EngineFromSpinal (aka amp/capacitor)
-                ___EngineMass -= foundEngineComp.supportWeight;
+                ___EngineMass -= foundEngineComp.SupportWeight;
                 ___ThrustRaw -= foundEngineComp.Thrust;
                 foundEngineComp.Off();
                 ___Engines.Remove(foundEngineComp); // Otherwise broken spinals in combat let engine still (visually) fire to no effect (also used to track for re-added parts)
-                foundEngineComp.reset(); //something was removed, start from scratch!
-                foundEngineComp.currentError = $"A supporting {argBuilding.def.label} of the spinal engine was removed!"; //Only use of this setter hrm
+                foundEngineComp.Reset(); //something was removed, start from scratch!
+                foundEngineComp.CurrentError = $"A supporting {argBuilding.def.label} of the spinal engine was removed!"; //Only use of this setter hrm
                 foundEngineComp.fullyFormed = false;
             }
         }

@@ -21,7 +21,7 @@ namespace TheCafFiend
             }
             else
             {
-                this.PowerOutput = engineToModify.powerUse;
+                this.PowerOutput = engineToModify.PowerUse;
             }
         }
     }

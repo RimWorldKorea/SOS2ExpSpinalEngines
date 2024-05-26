@@ -40,9 +40,6 @@
 				<fuelUseAmp>0.25</fuelUseAmp>
 				<powerUseAmp>0.01</powerUseAmp>
 			</li>
-			<li>
-				<compClass>CompColorable</compClass>
-			</li>
 		</comps>
 		<placeWorkers>
 			<li>TheCafFiend.PlaceWorker_NeedsSpinalEngineMount</li>
@@ -151,9 +148,6 @@
 				<fuelUseAmp>0.01</fuelUseAmp>
 				<powerUseAmp>6.00</powerUseAmp> <!-- not a typo-->
 			</li>
-			<li>
-				<compClass>CompColorable</compClass>
-			</li>
 		</comps>
 		<placeWorkers>
 			<li>TheCafFiend.PlaceWorker_NeedsSpinalEngineMount</li>
@@ -202,9 +196,6 @@
 				<emits>true</emits>
 				<supportWeight>10</supportWeight>
 				<stackEnd>true</stackEnd>
-			</li>
-			<li>
-				<compClass>CompColorable</compClass>
 			</li>
 		</comps>
 		<placeWorkers>
@@ -256,9 +247,6 @@
 				<supportWeight>5</supportWeight>
 				<fuelAllowAmp>0.75</fuelAllowAmp>
 			</li>
-			<li>
-				<compClass>CompColorable</compClass>
-			</li>
 		</comps>
 		<placeWorkers>
 			<li>TheCafFiend.PlaceWorker_NeedsSpinalEngineMount</li>
@@ -308,9 +296,6 @@
 				<emits>true</emits>
 				<supportWeight>15</supportWeight>
 				<fuelStackEnd>true</fuelStackEnd>
-			</li>
-			<li>
-				<compClass>CompColorable</compClass>
 			</li>
 		</comps>
 		<placeWorkers>
