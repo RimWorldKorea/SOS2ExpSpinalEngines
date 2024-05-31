@@ -361,3 +361,36 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Textures/Things/Building/Ship/SpinalEngine_ExhaustBell_east.dds
+/Textures/Things/Building/Ship/SpinalEngine_ExhaustBell_north.dds
+/Textures/Things/Building/Ship/SpinalEngine_ExhaustBell_Nuclear_east.dds
+/Textures/Things/Building/Ship/SpinalEngine_ExhaustBell_Nuclear_north.dds
+/Textures/Things/Building/Ship/SpinalEngine_ExhaustBell_Nuclear_south.dds
+/Textures/Things/Building/Ship/SpinalEngine_ExhaustBell_Nuclear_west.dds
+/Textures/Things/Building/Ship/SpinalEngine_ExhaustBell_south.dds
+/Textures/Things/Building/Ship/SpinalEngine_ExhaustBell_west.dds
+/Textures/Things/Building/Ship/SpinalEngine_FuelTankEnd_east.dds
+/Textures/Things/Building/Ship/SpinalEngine_FuelTankEnd_north.dds
+/Textures/Things/Building/Ship/SpinalEngine_FuelTankEnd_south.dds
+/Textures/Things/Building/Ship/SpinalEngine_FuelTankEnd_west.dds
+/Textures/Things/Building/Ship/SpinalEngine_FuelTankMiddle_east.dds
+/Textures/Things/Building/Ship/SpinalEngine_FuelTankMiddle_north.dds
+/Textures/Things/Building/Ship/SpinalEngine_FuelTankMiddle_south.dds
+/Textures/Things/Building/Ship/SpinalEngine_FuelTankMiddle_west.dds
+/Textures/Things/Building/Ship/SpinalEngine_FuelTankStart_east.dds
+/Textures/Things/Building/Ship/SpinalEngine_FuelTankStart_north.dds
+/Textures/Things/Building/Ship/SpinalEngine_FuelTankStart_south.dds
+/Textures/Things/Building/Ship/SpinalEngine_FuelTankStart_west.dds
+/Textures/Things/Building/Ship/SpinalEngine_Solenoid_Archo_east.dds
+/Textures/Things/Building/Ship/SpinalEngine_Solenoid_Archo_north.dds
+/Textures/Things/Building/Ship/SpinalEngine_Solenoid_Archo_south.dds
+/Textures/Things/Building/Ship/SpinalEngine_Solenoid_Archo_west.dds
+/Textures/Things/Building/Ship/SpinalEngine_Solenoid_east.dds
+/Textures/Things/Building/Ship/SpinalEngine_Solenoid_HighPower_east.dds
+/Textures/Things/Building/Ship/SpinalEngine_Solenoid_HighPower_north.dds
+/Textures/Things/Building/Ship/SpinalEngine_Solenoid_HighPower_south.dds
+/Textures/Things/Building/Ship/SpinalEngine_Solenoid_HighPower_west.dds
+/Textures/Things/Building/Ship/SpinalEngine_Solenoid_north.dds
+/Textures/Things/Building/Ship/SpinalEngine_Solenoid_south.dds
+/Textures/Things/Building/Ship/SpinalEngine_Solenoid_west.dds
+/_PublisherPlus.xml

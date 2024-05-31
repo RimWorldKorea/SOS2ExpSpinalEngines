@@ -19,10 +19,7 @@ namespace TheCafFiend
             {
                 return;
             }
-            else
-            {
-                this.PowerOutput = engineToModify.PowerUse;
-            }
+            this.PowerOutput = engineToModify.PowerUse;
         }
     }
 }
