@@ -119,7 +119,7 @@ namespace TheCafFiend
                 foundEngineComp.Off();
                 ___Engines.Remove(foundEngineComp); // Otherwise broken spinals in combat let engine still (visually) fire to no effect (also used to track for re-added parts)
                 foundEngineComp.Reset(); //something was removed, start from scratch!
-                foundEngineComp.CurrentError = $"A supporting {argBuilding.def.label} of the spinal engine was removed!"; //Only use of this setter hrm
+                foundEngineComp.CurrentError = "SoS.SpinalEngines.ComponentRemoved".Translate(argBuilding.def.label); //Only use of this setter hrm
                 foundEngineComp.fullyFormed = false;
             }
         }

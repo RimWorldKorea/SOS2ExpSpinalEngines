@@ -14,8 +14,8 @@ namespace TheCafFiend
             
             if (fullyFormed)
             {
-                stringBuilder.Append("SoS.SpinalEngine.FuelRate".Translate(cachedFuelUse, cachedFuelAllowed)); // "Fuel burn rate per second: {cachedFuelUse} of {cachedFuelAllowed} supported"
-                stringBuilder.AppendInNewLine("SoS.SpinalEngine.Thrust".Translate(cachedThrust * 500)); // "Thrust: {cachedThrust * 500}"
+                stringBuilder.Append("SoS.SpinalEngines.FuelRate".Translate(cachedFuelUse, cachedFuelAllowed)); // "Fuel burn rate per second: {cachedFuelUse} of {cachedFuelAllowed} supported"
+                stringBuilder.AppendInNewLine("SoS.SpinalEngines.Thrust".Translate(cachedThrust * 500)); // "Thrust: {cachedThrust * 500}"
             }
             else
             {
@@ -43,7 +43,7 @@ namespace TheCafFiend
         private int cachedFuelUse = 0;
         private int cachedPowerUse = 0;
         private int cachedFuelAllowed = 0; // Error below probably never surfaces to a player but I want a fallback
-        private string cachedError = "Spinal engine isn't fully formed! Check for engine accelerators, and all three components of the fuel infrastructure!";
+        private string cachedError = "SoS.SpinalEngines.DefaultError".Translate();
         public override int Thrust
         {
             get
@@ -143,7 +143,7 @@ namespace TheCafFiend
             cachedFuelUse = 0;
             cachedFuelAllowed = 0;
             cachedPowerUse = 0;
-            cachedError = "Spinal engine isn't fully formed! Check for engine accelerators, and all three components of the fuel infrastructure!";
+            cachedError = "SoS.SpinalEngines.DefaultError".Translate();
         }
         private void calc()
         {
@@ -218,7 +218,7 @@ namespace TheCafFiend
                 if (buildingPointer.Rotation.Opposite != instance.parent.Rotation) // Remember, engines vs amps are inverted
                 {
                     //Log.Message("SOS2 spinal engines: amps rotation in SpinalRecalc did not match parent rotation");
-                    toReturn.playerError = "Backwards spinal component found!";
+                    toReturn.playerError = "SoS.SpinalEngines.BackwardsSpinal".Translate();
                     return toReturn;
                 }
                 //This is... A way, to check I guess. (buildingPointer = prevthingppos.getfirstcomp<spinal> above returns thing, if that is *also* the center, 1-wide, must? be amp) 
@@ -249,14 +249,14 @@ namespace TheCafFiend
             //Log.Message($"Found amps on spinal engine: ThrustBoost: {toReturn.thrustAmp}, fuelstart is {foundFuelStart}");
             if (toReturn.thrustAmp == 0)
             {
-                toReturn.playerError = "SoS.SpinalEngine.NoAccelerator".Translate();
+                toReturn.playerError = "SoS.SpinalEngines.NoAccelerator".Translate();
                 // "No engine accelerators found attached to engine!"
                 return toReturn;
             }
 
             if (foundFuelStart == false)
             {
-                toReturn.playerError = "SoS.SpinalEngine.NoFuelSupport".Translate();
+                toReturn.playerError = "SoS.SpinalEngines.NoFuelSupport".Translate();
                 // "No fuel support infrastructure found; Ensure accelerators are connected directly into the fuel support end!"
                 return toReturn;
             }
@@ -275,7 +275,7 @@ namespace TheCafFiend
                 CompSpinalEngineMount ampComp = buildingPointer.TryGetComp<CompSpinalEngineMount>();
                 if (buildingPointer.Rotation.Opposite != instance.parent.Rotation) // Remember, engines vs amps are inverted
                 {
-                    toReturn.playerError = "Backwards spinal component found!";
+                    toReturn.playerError = "SoS.SpinalEngines.BackwardsSpinal".Translate();
                     return toReturn;
                 }
                 if (buildingPointer.Position == previousThingPos && ampComp.Props.fuelStackEnd == false) // tank ends are also 1 wide!
@@ -297,14 +297,14 @@ namespace TheCafFiend
             // Didn't bail trying to build the fuel infra!
             if (foundFuelEnd == false) // Incomplete fuel
             {
-                toReturn.playerError = "SoS.SpinalEngine.NoFuelSupportEnd".Translate();
+                toReturn.playerError = "SoS.SpinalEngines.NoFuelSupportEnd".Translate();
                 // "Fuel infrastructure found, but not a complete set: Is the end missing?"
                 return toReturn;
             }
             //Also bails if someone tries to build a cheeky 0-middle engine fuel support. (int) because floating point is the devil
             if ((int)(toReturn.fuelAllowAmp * instance.Properties.fuelAllowed) < (int)(toReturn.fuelAmp * instance.Properties.fuelUse))
             {
-                toReturn.playerError = "SoS.SpinalEngine.InSufficientFuelSupport".Translate((int)(toReturn.fuelAmp * instance.Properties.fuelUse), (int)(toReturn.fuelAllowAmp * instance.Properties.fuelAllowed));
+                toReturn.playerError = "SoS.SpinalEngines.InSufficientFuelSupport".Translate((int)(toReturn.fuelAmp * instance.Properties.fuelUse), (int)(toReturn.fuelAllowAmp * instance.Properties.fuelAllowed));
                 // "Insufficent fuel structures to support accelerators: Requires {(int)(toReturn.fuelAmp * instance.Properties.fuelUse)} fuel/second, can supply {(int)(toReturn.fuelAllowAmp * instance.Properties.fuelAllowed)} per second"
                 return toReturn;
             }
