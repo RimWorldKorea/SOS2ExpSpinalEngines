@@ -14,8 +14,8 @@ namespace TheCafFiend
             
             if (fullyFormed)
             {
-                stringBuilder.Append($"Fuel burn rate per second: {cachedFuelUse} of {cachedFuelAllowed} supported");
-                stringBuilder.AppendInNewLine($"Thrust: {cachedThrust * 500}");
+                stringBuilder.Append("SoS.SpinalEngine.FuelRate".Translate(cachedFuelUse, cachedFuelAllowed)); // "Fuel burn rate per second: {cachedFuelUse} of {cachedFuelAllowed} supported"
+                stringBuilder.AppendInNewLine("SoS.SpinalEngine.Thrust".Translate(cachedThrust * 500)); // "Thrust: {cachedThrust * 500}"
             }
             else
             {
@@ -249,13 +249,15 @@ namespace TheCafFiend
             //Log.Message($"Found amps on spinal engine: ThrustBoost: {toReturn.thrustAmp}, fuelstart is {foundFuelStart}");
             if (toReturn.thrustAmp == 0)
             {
-                toReturn.playerError = "No engine accelerators found attached to engine!";
+                toReturn.playerError = "SoS.SpinalEngine.NoAccelerator".Translate();
+                // "No engine accelerators found attached to engine!"
                 return toReturn;
             }
 
             if (foundFuelStart == false)
             {
-                toReturn.playerError = "No fuel support infrastructure found; Ensure accelerators are connected directly into the fuel support end!";
+                toReturn.playerError = "SoS.SpinalEngine.NoFuelSupport".Translate();
+                // "No fuel support infrastructure found; Ensure accelerators are connected directly into the fuel support end!"
                 return toReturn;
             }
             // to get here, foundNonAmp is true, foundFuelStart is true, and it didn't bail earlier on a broken rotation/nonamp
@@ -295,13 +297,15 @@ namespace TheCafFiend
             // Didn't bail trying to build the fuel infra!
             if (foundFuelEnd == false) // Incomplete fuel
             {
-                toReturn.playerError = "Fuel infrastructure found, but not a complete set: Is the end missing?";
+                toReturn.playerError = "SoS.SpinalEngine.NoFuelSupportEnd".Translate();
+                // "Fuel infrastructure found, but not a complete set: Is the end missing?"
                 return toReturn;
             }
             //Also bails if someone tries to build a cheeky 0-middle engine fuel support. (int) because floating point is the devil
             if ((int)(toReturn.fuelAllowAmp * instance.Properties.fuelAllowed) < (int)(toReturn.fuelAmp * instance.Properties.fuelUse))
             {
-                toReturn.playerError = $"Insufficent fuel structures to support accelerators: Requires {(int)(toReturn.fuelAmp * instance.Properties.fuelUse)} fuel/second, can supply {(int)(toReturn.fuelAllowAmp * instance.Properties.fuelAllowed)} per second";
+                toReturn.playerError = "SoS.SpinalEngine.InSufficientFuelSupport".Translate((int)(toReturn.fuelAmp * instance.Properties.fuelUse), (int)(toReturn.fuelAllowAmp * instance.Properties.fuelAllowed));
+                // "Insufficent fuel structures to support accelerators: Requires {(int)(toReturn.fuelAmp * instance.Properties.fuelUse)} fuel/second, can supply {(int)(toReturn.fuelAllowAmp * instance.Properties.fuelAllowed)} per second"
                 return toReturn;
             }
             // After all of the previous this has? to be a real spinal, right?
