@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <SoS.SpinalEngine.FuelRate>Fuel burn rate per second: {0} of {1} supported</SoS.SpinalEngine.FuelRate>
+  <SoS.SpinalEngine.Thrust>Thrust: {0}</SoS.SpinalEngine.Thrust>
+  <SoS.SpinalEngine.NoAccelerator>No engine accelerators found attached to engine!</SoS.SpinalEngine.NoAccelerator>
+  <SoS.SpinalEngine.NoFuelSupport>No fuel support infrastructure found; Ensure accelerators are connected directly into the fuel support end!</SoS.SpinalEngine.NoFuelSupport>
+  <SoS.SpinalEngine.NoFuelSupportEnd>Fuel infrastructure found, but not a complete set: Is the end missing?</SoS.SpinalEngine.NoFuelSupportEnd>
+  <SoS.SpinalEngine.InSufficientFuelSupport>Insufficent fuel structures to support accelerators: Requires {0} fuel/second, can supply {1} per second</SoS.SpinalEngine.InSufficientFuelSupport>
+</LanguageData>
